@@ -1,5 +1,5 @@
 ﻿#include "Player.h"
-//#include "ImGuiManager.h"
+#include "ImGuiManager.h"
 //#include "Vector3.h"
 #include <cassert>
 
@@ -18,7 +18,20 @@ void Player::Initialize(Model* model) {
 }
 
 // 更新
-void Player::Update() {}
+void Player::Update() {
+	//ImGui::Begin("Debug1");
+	//ImGui::Text("%d.%d.%d", 2050, 12, 31);
+	//ImGui::End();
+
+	//worldTransform_.translation_.x += 0.01f;
+
+	//// 変換行列を更新
+	//worldTransform_.matWorld_ = MakeAffineMatrix(
+	//    worldTransform_.scale_, worldTransform_.rotation_,
+	//    worldTransform_.translation_);
+	//// 変換行列を定数バッファに転送
+	//worldTransform_.TransferMatrix();
+}
 
 // 描画
 void Player::Draw(const ViewProjection& viewProjection) {

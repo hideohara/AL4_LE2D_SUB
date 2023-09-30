@@ -38,11 +38,29 @@ void GameScene::Initialize() {
 	player_->Initialize(modelFighter_.get());
 	ground_->Initialize(modelGround_.get());
 	skydome_->Initialize(modelSkydome_.get());
+
+	// デバッグカメラの生成
+	debugCamera_ = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
+	debugCamera_->SetFarZ(2000.0f);
+
+	// 軸方向表示の表示を有効にする
+	AxisIndicator::GetInstance()->SetVisible(true);
+	// 軸方向表示が参照するビュープロジェクションを指定する（アドレス渡し）
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 }
 
 
 // 更新
-void GameScene::Update() {}
+void GameScene::Update() { 
+	// デバッグカメラの更新
+	debugCamera_->Update();
+	//viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+	//viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+	// ビュープロジェクションの転送
+	viewProjection_.TransferMatrix();
+
+	player_->Update();
+}
 
 // 描画
 void GameScene::Draw() {
@@ -73,9 +91,15 @@ void GameScene::Draw() {
 	/// </summary>
 	
     // クラスの描画
+	player_->Draw(debugCamera_->GetViewProjection());
+	ground_->Draw(debugCamera_->GetViewProjection());
+	skydome_->Draw(debugCamera_->GetViewProjection());
+	
+/*
 	player_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
 	skydome_->Draw(viewProjection_);
+*/
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

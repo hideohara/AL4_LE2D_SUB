@@ -2,6 +2,7 @@
 
 #include "Model.h"
 #include "WorldTransform.h"
+#include "MathUtilityForText.h"
 
 /// <summary>
 /// 自キャラ
