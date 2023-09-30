@@ -4,9 +4,9 @@
 #include "WorldTransform.h"
 
 /// <summary>
-/// 自キャラ
+/// 地面
 /// </summary>
-class Player {
+class Ground {
 public:
 	// 初期化
 	void Initialize(Model* model);
@@ -17,7 +17,6 @@ public:
 	// 描画
 	void Draw(const ViewProjection& viewProjection);
 
-	
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
