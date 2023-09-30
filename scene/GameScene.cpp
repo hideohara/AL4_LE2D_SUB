@@ -7,8 +7,8 @@ GameScene::GameScene() {}
 
 // デストラクタ
 GameScene::~GameScene() {
-	delete player_; // プレイヤークラス
-	delete model_;  // モデル
+	//delete player_; // プレイヤークラス
+	//delete model_;  // モデル
 }
 
 // 初期化
@@ -23,11 +23,11 @@ void GameScene::Initialize() {
 	// ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.jpg");
 	// 3Dモデルの生成
-	model_ = Model::Create();
+	model_.reset(Model::Create());
 	// 自キャラの生成
-	player_ = new Player();
+	player_ = std::make_unique<Player>();
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
+	player_->Initialize(model_.get(), textureHandle_);
 }
 
 

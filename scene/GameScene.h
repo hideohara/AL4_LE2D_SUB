@@ -9,6 +9,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Player.h"
+#include <memory>
 
 /// <summary>
 /// ゲームシーン
@@ -55,7 +56,7 @@ private: // メンバ変数
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 	// モデルデータ
-	Model* model_ = nullptr;
+	std::unique_ptr<Model> model_ ;
 	// 自キャラ
-	Player* player_ = nullptr;
+	std::unique_ptr<Player> player_;
 };
