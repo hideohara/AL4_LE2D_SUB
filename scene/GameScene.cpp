@@ -2,13 +2,16 @@
 #include "TextureManager.h"
 #include <cassert>
 
+
 GameScene::GameScene() {}
 
+// デストラクタ
 GameScene::~GameScene() {
 	delete player_; // プレイヤークラス
 	delete model_;  // モデル
 }
 
+// 初期化
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
@@ -28,8 +31,10 @@ void GameScene::Initialize() {
 }
 
 
+// 更新
 void GameScene::Update() {}
 
+// 描画
 void GameScene::Draw() {
 
 	// コマンドリストの取得
