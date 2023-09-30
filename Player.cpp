@@ -15,6 +15,9 @@ void Player::Initialize(Model* model) {
 
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
+
+	// インプット
+	input_ = Input::GetInstance();
 }
 
 // 更新
@@ -23,14 +26,28 @@ void Player::Update() {
 	//ImGui::Text("%d.%d.%d", 2050, 12, 31);
 	//ImGui::End();
 
-	//worldTransform_.translation_.x += 0.01f;
+	const float speed = 0.3f;
+	Vector3 move = {0.0f, 0.0f, 0.0f};
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+		move.x = 1.0f * speed;
+	}
+	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+		move.x = -1.0f * speed;
+	}
+	if (Input::GetInstance()->PushKey(DIK_UP)) {
+		move.z = 1.0f * speed;
+	}
+	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
+		move.z = -1.0f * speed;
+	}
+	worldTransform_.translation_ += move;
 
-	//// 変換行列を更新
-	//worldTransform_.matWorld_ = MakeAffineMatrix(
-	//    worldTransform_.scale_, worldTransform_.rotation_,
-	//    worldTransform_.translation_);
-	//// 変換行列を定数バッファに転送
-	//worldTransform_.TransferMatrix();
+	// 変換行列を更新
+	worldTransform_.matWorld_ = MakeAffineMatrix(
+	    worldTransform_.scale_, worldTransform_.rotation_,
+	    worldTransform_.translation_);
+	// 変換行列を定数バッファに転送
+	worldTransform_.TransferMatrix();
 }
 
 // 描画

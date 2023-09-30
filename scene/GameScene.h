@@ -13,7 +13,7 @@
 #include "Skydome.h"
 #include "DebugCamera.h"
 #include <memory>
-
+#include "FollowCamera.h"
 #include "AxisIndicator.h"
 
 /// <summary>
@@ -75,5 +75,8 @@ private: // メンバ変数
 	// デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_;
 	// デバッグカメラ有効
-	//bool isDebugCameraActive_ = false;
+	bool isDebugCameraActive_ = false;
+
+	// 追従カメラ
+	std::unique_ptr<FollowCamera> followCamera_;
 };

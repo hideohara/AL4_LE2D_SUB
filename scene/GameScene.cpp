@@ -29,19 +29,29 @@ void GameScene::Initialize() {
 	modelGround_.reset(Model::CreateFromOBJ("ground", true));
 	modelFighter_.reset(Model::CreateFromOBJ("float", true));
 
-	// クラスの生成
+	// 自機
 	player_ = std::make_unique<Player>();
-	ground_ = std::make_unique<Ground>();
-	skydome_ = std::make_unique<Skydome>();
-
-	// クラスの初期化
 	player_->Initialize(modelFighter_.get());
+
+	// 地面
+	ground_ = std::make_unique<Ground>();
 	ground_->Initialize(modelGround_.get());
+
+	// スカイドーム
+	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_.get());
 
-	// デバッグカメラの生成
+	// デバッグカメラ
 	debugCamera_ = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	debugCamera_->SetFarZ(2000.0f);
+
+	// 追従カメラ
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->Initialize();
+
+	// 自キャラのワールドトランスフォームを追従カメラにセット
+	followCamera_->SetTarget(&player_->GetWorldTransform());
+
 
 	// 軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
@@ -52,10 +62,21 @@ void GameScene::Initialize() {
 
 // 更新
 void GameScene::Update() { 
+
 	// デバッグカメラの更新
-	debugCamera_->Update();
-	//viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-	//viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+	if (input_->TriggerKey(DIK_0)) {
+		// フラグをトグル
+		isDebugCameraActive_ = !isDebugCameraActive_;
+	}
+	if (isDebugCameraActive_ == true) {
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+	} else {
+		followCamera_->Update();
+		viewProjection_.matView = followCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+	}
 	// ビュープロジェクションの転送
 	viewProjection_.TransferMatrix();
 
@@ -90,16 +111,20 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	
-    // クラスの描画
-	player_->Draw(debugCamera_->GetViewProjection());
-	ground_->Draw(debugCamera_->GetViewProjection());
-	skydome_->Draw(debugCamera_->GetViewProjection());
-	
-/*
+ //   // クラスの描画
+	//if (isDebugCameraActive_ == true) {
+	//	player_->Draw(debugCamera_->GetViewProjection());
+	//	ground_->Draw(debugCamera_->GetViewProjection());
+	//	skydome_->Draw(debugCamera_->GetViewProjection());
+	//} else {
+	//	player_->Draw(viewProjection_);
+	//	ground_->Draw(viewProjection_);
+	//	skydome_->Draw(viewProjection_);
+	//}
+
 	player_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
 	skydome_->Draw(viewProjection_);
-*/
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
