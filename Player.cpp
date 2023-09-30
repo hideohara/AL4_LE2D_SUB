@@ -40,7 +40,24 @@ void Player::Update() {
 	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
 		move.z = -1.0f * speed;
 	}
+
+	if (viewProjection_) {
+		// カメラの回転行列
+		Matrix4x4 matRotX = MakeRotateXMatrix(viewProjection_->rotation_.x);
+		Matrix4x4 matRotY = MakeRotateYMatrix(viewProjection_->rotation_.y);
+		Matrix4x4 matRotZ = MakeRotateZMatrix(viewProjection_->rotation_.z);
+		// 回転行列の合成
+		Matrix4x4 matRot = matRotZ * matRotX * matRotY;
+
+		// 移動量をカメラの回転に合わせて回転させる
+		move = TransformNormal(move, matRot);
+	}
+
 	worldTransform_.translation_ += move;
+
+	// 移動ベクトルのY軸周り角度
+	worldTransform_.rotation_.y = std::atan2(move.x, move.z);
+
 
 	// 変換行列を更新
 	worldTransform_.matWorld_ = MakeAffineMatrix(

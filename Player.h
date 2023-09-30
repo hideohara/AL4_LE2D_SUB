@@ -21,6 +21,11 @@ public:
 
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 
+	
+    void SetViewProjection(const ViewProjection* viewProjection) {
+		viewProjection_ = viewProjection;
+	}
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -30,4 +35,7 @@ private:
 	uint32_t textureHandle_ = 0u;
 	// 入力
 	Input* input_ = nullptr;
+
+	// カメラのビュープロジェクション
+	const ViewProjection* viewProjection_ = nullptr;
 };
