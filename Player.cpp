@@ -28,7 +28,7 @@ void Player::Update() {
 
 	const float speed = 0.3f;
 	Vector3 move = {0.0f, 0.0f, 0.0f};
-	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+	if (input_->PushKey(DIK_RIGHT)) {
 		move.x = 1.0f * speed;
 	}
 	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
