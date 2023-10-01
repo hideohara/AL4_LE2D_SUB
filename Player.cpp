@@ -29,17 +29,19 @@ void Player::Update() {
 	const float speed = 0.3f;
 	Vector3 move = {0.0f, 0.0f, 0.0f};
 	if (input_->PushKey(DIK_RIGHT)) {
-		move.x = 1.0f * speed;
+		move.x = 1.0f;
 	}
 	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-		move.x = -1.0f * speed;
+		move.x = -1.0f;
 	}
 	if (Input::GetInstance()->PushKey(DIK_UP)) {
-		move.z = 1.0f * speed;
+		move.z = 1.0f;
 	}
 	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
-		move.z = -1.0f * speed;
+		move.z = -1.0f;
 	}
+
+	move = Normalize(move) * speed;
 
 	if (viewProjection_) {
 		// カメラの回転行列
