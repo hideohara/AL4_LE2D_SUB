@@ -144,6 +144,21 @@ void Player::Update() {
 	} // 変換行列を定数バッファに転送
 	worldTransformR_arm_.TransferMatrix();
 
+
+	ImGui::Begin("Player");
+	ImGui::SliderFloat3(
+	    "Head Translation", reinterpret_cast<float*>(&worldTransformHead_.translation_), -10.0f,
+	    10.0f);
+	ImGui::SliderFloat3(
+	    "ArmL Translation", reinterpret_cast<float*>(&worldTransformL_arm_.translation_), -10.0f,
+	    10.0f);
+	ImGui::SliderFloat3(
+	    "ArmR Translation", reinterpret_cast<float*>(&worldTransformR_arm_.translation_), -10.0f,
+	    10.0f);
+	//ImGui::SliderInt("floatingCycle", reinterpret_cast<int*>(&floatingCycle_), 1, 200);
+	//ImGui::SliderFloat("floatingAmplitude", &floatingAmplitude_, 0.0f, 10.0f);
+	//ImGui::SliderFloat("idleArmAngleMax_", &idleArmAngleMax_, 0.0f, 180.0f);
+	ImGui::End();
 }
 
 // 描画
