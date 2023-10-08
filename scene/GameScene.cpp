@@ -27,11 +27,20 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	modelSkydome_.reset(Model::CreateFromOBJ("skydome", true));
 	modelGround_.reset(Model::CreateFromOBJ("ground", true));
-	modelFighter_.reset(Model::CreateFromOBJ("float", true));
+	//modelFighter_.reset(Model::CreateFromOBJ("float", true));
+
+	modelFighterBody_.reset(Model::CreateFromOBJ("float_Body", true));
+	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
+	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
+	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
 
 	// 自機
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelFighter_.get());
+	//player_->Initialize(modelFighter_.get());
+	player_->Initialize(
+	    modelFighterBody_.get(), modelFighterHead_.get(), 
+		modelFighterL_arm_.get(),
+	    modelFighterR_arm_.get());
 
 	// 地面
 	ground_ = std::make_unique<Ground>();
