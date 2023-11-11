@@ -98,51 +98,60 @@ void Player::Update() {
 	//worldTransformL_arm_.rotation_.x += 0.1f;
 
 	// 変換行列を更新
-	worldTransformBase_.matWorld_ = MakeAffineMatrix(
-	    worldTransformBase_.scale_, worldTransformBase_.rotation_,
-	    worldTransformBase_.translation_);
-	// 変換行列を定数バッファに転送
-	worldTransformBase_.TransferMatrix();
+	worldTransformBase_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();
+	worldTransformHead_.UpdateMatrix();
+	worldTransformR_arm_.UpdateMatrix();
+	worldTransformL_arm_.UpdateMatrix();
 
-	// 変換行列を更新（BODY）
-	worldTransformBody_.matWorld_ = MakeAffineMatrix(
-	    worldTransformBody_.scale_, worldTransformBody_.rotation_,
-	    worldTransformBody_.translation_);
-	// 親があれば親のワールド行列を掛ける
-	if (worldTransformBody_.parent_) {
-		worldTransformBody_.matWorld_ *= worldTransformBody_.parent_->matWorld_;
-	} // 変換行列を定数バッファに転送
-	worldTransformBody_.TransferMatrix();
 
-	// 変換行列を更新（HEAD）
-	worldTransformHead_.matWorld_ = MakeAffineMatrix(
-	    worldTransformHead_.scale_, worldTransformHead_.rotation_,
-	    worldTransformHead_.translation_);
-	// 親があれば親のワールド行列を掛ける
-	if (worldTransformHead_.parent_) {
-		worldTransformHead_.matWorld_ *= worldTransformHead_.parent_->matWorld_;
-	} // 変換行列を定数バッファに転送
-	worldTransformHead_.TransferMatrix();
+	//// 変換行列を更新
+	// worldTransformBase_.matWorld_ = MakeAffineMatrix(
+	//    worldTransformBase_.scale_, worldTransformBase_.rotation_,
+	//    worldTransformBase_.translation_);
+	//// 変換行列を定数バッファに転送
+	//worldTransformBase_.TransferMatrix();
 
-	// 変換行列を更新（左手）
-	worldTransformL_arm_.matWorld_ = MakeAffineMatrix(
-	    worldTransformL_arm_.scale_, worldTransformL_arm_.rotation_,
-	    worldTransformL_arm_.translation_);
-	// 親があれば親のワールド行列を掛ける
-	if (worldTransformL_arm_.parent_) {
-		worldTransformL_arm_.matWorld_ *= worldTransformL_arm_.parent_->matWorld_;
-	} // 変換行列を定数バッファに転送
-	worldTransformL_arm_.TransferMatrix();
 
-	// 変換行列を更新（右手）
-	worldTransformR_arm_.matWorld_ = MakeAffineMatrix(
-	    worldTransformR_arm_.scale_, worldTransformR_arm_.rotation_,
-	    worldTransformR_arm_.translation_);
-	// 親があれば親のワールド行列を掛ける
-	if (worldTransformR_arm_.parent_) {
-		worldTransformR_arm_.matWorld_ *= worldTransformR_arm_.parent_->matWorld_;
-	} // 変換行列を定数バッファに転送
-	worldTransformR_arm_.TransferMatrix();
+	//// 変換行列を更新（BODY）
+	//worldTransformBody_.matWorld_ = MakeAffineMatrix(
+	//    worldTransformBody_.scale_, worldTransformBody_.rotation_,
+	//    worldTransformBody_.translation_);
+	//// 親があれば親のワールド行列を掛ける
+	//if (worldTransformBody_.parent_) {
+	//	worldTransformBody_.matWorld_ *= worldTransformBody_.parent_->matWorld_;
+	//} // 変換行列を定数バッファに転送
+	//worldTransformBody_.TransferMatrix();
+
+	//// 変換行列を更新（HEAD）
+	//worldTransformHead_.matWorld_ = MakeAffineMatrix(
+	//    worldTransformHead_.scale_, worldTransformHead_.rotation_,
+	//    worldTransformHead_.translation_);
+	//// 親があれば親のワールド行列を掛ける
+	//if (worldTransformHead_.parent_) {
+	//	worldTransformHead_.matWorld_ *= worldTransformHead_.parent_->matWorld_;
+	//} // 変換行列を定数バッファに転送
+	//worldTransformHead_.TransferMatrix();
+
+	//// 変換行列を更新（左手）
+	//worldTransformL_arm_.matWorld_ = MakeAffineMatrix(
+	//    worldTransformL_arm_.scale_, worldTransformL_arm_.rotation_,
+	//    worldTransformL_arm_.translation_);
+	//// 親があれば親のワールド行列を掛ける
+	//if (worldTransformL_arm_.parent_) {
+	//	worldTransformL_arm_.matWorld_ *= worldTransformL_arm_.parent_->matWorld_;
+	//} // 変換行列を定数バッファに転送
+	//worldTransformL_arm_.TransferMatrix();
+
+	//// 変換行列を更新（右手）
+	//worldTransformR_arm_.matWorld_ = MakeAffineMatrix(
+	//    worldTransformR_arm_.scale_, worldTransformR_arm_.rotation_,
+	//    worldTransformR_arm_.translation_);
+	//// 親があれば親のワールド行列を掛ける
+	//if (worldTransformR_arm_.parent_) {
+	//	worldTransformR_arm_.matWorld_ *= worldTransformR_arm_.parent_->matWorld_;
+	//} // 変換行列を定数バッファに転送
+	//worldTransformR_arm_.TransferMatrix();
 
 
 	ImGui::Begin("Player");
