@@ -2,13 +2,12 @@
 #include "TextureManager.h"
 #include <cassert>
 
-
 GameScene::GameScene() {}
 
 // デストラクタ
 GameScene::~GameScene() {
-	//delete player_; // プレイヤークラス
-	//delete model_;  // モデル
+	// delete player_; // プレイヤークラス
+	// delete model_;  // モデル
 }
 
 // 初期化
@@ -27,20 +26,25 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	modelSkydome_.reset(Model::CreateFromOBJ("skydome", true));
 	modelGround_.reset(Model::CreateFromOBJ("ground", true));
-	//modelFighter_.reset(Model::CreateFromOBJ("float", true));
+	// modelFighter_.reset(Model::CreateFromOBJ("float", true));
 
 	modelFighterBody_.reset(Model::CreateFromOBJ("float_Body", true));
 	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
 	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
 	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
 
+	modelEnemy_.reset(Model::CreateFromOBJ("needle_Body", true));
+
 	// 自機
 	player_ = std::make_unique<Player>();
-	//player_->Initialize(modelFighter_.get());
+	// player_->Initialize(modelFighter_.get());
 	player_->Initialize(
-	    modelFighterBody_.get(), modelFighterHead_.get(), 
-		modelFighterL_arm_.get(),
+	    modelFighterBody_.get(), modelFighterHead_.get(), modelFighterL_arm_.get(),
 	    modelFighterR_arm_.get());
+
+	// 敵
+	enemy_ = std::make_unique<Enemy>();
+	enemy_->Initialize(modelEnemy_.get());
 
 	// 地面
 	ground_ = std::make_unique<Ground>();
@@ -63,16 +67,14 @@ void GameScene::Initialize() {
 	// 自キャラのワールドトランスフォームを追従カメラにセット
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
-
 	// 軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する（アドレス渡し）
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 }
 
-
 // 更新
-void GameScene::Update() { 
+void GameScene::Update() {
 
 	// デバッグカメラの更新
 	if (input_->TriggerKey(DIK_0)) {
@@ -92,6 +94,7 @@ void GameScene::Update() {
 	viewProjection_.TransferMatrix();
 
 	player_->Update();
+	enemy_->Update();
 }
 
 // 描画
@@ -121,9 +124,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	
- //   // クラスの描画
-	//if (isDebugCameraActive_ == true) {
+
+	//   // クラスの描画
+	// if (isDebugCameraActive_ == true) {
 	//	player_->Draw(debugCamera_->GetViewProjection());
 	//	ground_->Draw(debugCamera_->GetViewProjection());
 	//	skydome_->Draw(debugCamera_->GetViewProjection());
@@ -134,6 +137,7 @@ void GameScene::Draw() {
 	//}
 
 	player_->Draw(viewProjection_);
+	enemy_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
 	skydome_->Draw(viewProjection_);
 
