@@ -1,7 +1,7 @@
 #include "GameScene.h"
+#include "ImGuiManager.h"
 #include "TextureManager.h"
 #include <cassert>
-
 GameScene::GameScene() {}
 
 // デストラクタ
@@ -95,6 +95,22 @@ void GameScene::Update() {
 
 	player_->Update();
 	enemy_->Update();
+
+	// 衝突判定
+	if (enemy_->GetY() == 0) {
+
+		float dx = abs(player_->GetX() - enemy_->GetX());
+		float dz = abs(player_->GetZ() - enemy_->GetZ());
+		if (dx < 1 && dz < 1) {
+			// 衝突
+			// ImGui::Begin("Hit");
+			// ImGui::InputFloat("DX", &dx);
+			// ImGui::InputFloat("DZ", &dz);
+			// ImGui::End();
+
+			enemy_->Hit();
+		}
+	}
 }
 
 // 描画

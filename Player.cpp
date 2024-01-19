@@ -1,6 +1,6 @@
 ﻿#include "Player.h"
 #include "ImGuiManager.h"
-//#include "Vector3.h"
+// #include "Vector3.h"
 #include <cassert>
 
 // 初期化
@@ -17,7 +17,6 @@ void Player::Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, M
 	modelHead_ = modelHead;
 	modelL_arm_ = modelL_arm;
 	modelR_arm_ = modelR_arm;
-
 
 	// 親子構造
 	// ワールド変換の初期化
@@ -42,20 +41,18 @@ void Player::Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, M
 
 	// 移動
 
-
 	// インプット
 	input_ = Input::GetInstance();
 
 	// ギミック初期化
 	InitializeFloatingGimmick();
-
 }
 
 // 更新
 void Player::Update() {
-	//ImGui::Begin("Debug1");
-	//ImGui::Text("%d.%d.%d", 2050, 12, 31);
-	//ImGui::End();
+	// ImGui::Begin("Debug1");
+	// ImGui::Text("%d.%d.%d", 2050, 12, 31);
+	// ImGui::End();
 
 	// ギミック更新
 	UpdateFloatingGimmick();
@@ -95,7 +92,7 @@ void Player::Update() {
 	worldTransformBase_.rotation_.y = std::atan2(move.x, move.z);
 
 	// round
-	//worldTransformL_arm_.rotation_.x += 0.1f;
+	// worldTransformL_arm_.rotation_.x += 0.1f;
 
 	// 変換行列を更新
 	worldTransformBase_.matWorld_ = MakeAffineMatrix(
@@ -144,7 +141,6 @@ void Player::Update() {
 	} // 変換行列を定数バッファに転送
 	worldTransformR_arm_.TransferMatrix();
 
-
 	ImGui::Begin("Player");
 	ImGui::SliderFloat3(
 	    "Head Translation", reinterpret_cast<float*>(&worldTransformHead_.translation_), -10.0f,
@@ -155,9 +151,9 @@ void Player::Update() {
 	ImGui::SliderFloat3(
 	    "ArmR Translation", reinterpret_cast<float*>(&worldTransformR_arm_.translation_), -10.0f,
 	    10.0f);
-	//ImGui::SliderInt("floatingCycle", reinterpret_cast<int*>(&floatingCycle_), 1, 200);
-	//ImGui::SliderFloat("floatingAmplitude", &floatingAmplitude_, 0.0f, 10.0f);
-	//ImGui::SliderFloat("idleArmAngleMax_", &idleArmAngleMax_, 0.0f, 180.0f);
+	// ImGui::SliderInt("floatingCycle", reinterpret_cast<int*>(&floatingCycle_), 1, 200);
+	// ImGui::SliderFloat("floatingAmplitude", &floatingAmplitude_, 0.0f, 10.0f);
+	// ImGui::SliderFloat("idleArmAngleMax_", &idleArmAngleMax_, 0.0f, 180.0f);
 	ImGui::End();
 }
 
@@ -173,13 +169,13 @@ void Player::Draw(const ViewProjection& viewProjection) {
 void Player::InitializeFloatingGimmick() { floatingParameter_ = 0.0f; }
 
 void Player::UpdateFloatingGimmick() {
-	
+
 	// 最もシンプルな処理
 	floatingParameter_ += 0.1f;
 	worldTransformBody_.translation_.y = std::sin(floatingParameter_) * 0.2f;
 	worldTransformL_arm_.rotation_.x = std::sin(floatingParameter_) * 0.5f;
 	worldTransformR_arm_.rotation_.x = std::sin(floatingParameter_) * 0.5f;
-	
+
 	/*
 	const float floatingStep = PI * 2.0f / floatingCycle_;
 

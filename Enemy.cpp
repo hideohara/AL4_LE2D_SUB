@@ -29,6 +29,16 @@ void Enemy::Update() {
 	// 移動
 	worldTransformBase_.translation_ += move;
 
+	// ジャンプ
+	if (jumpFlag_ == true) {
+		worldTransformBase_.translation_.y += jumpSpeed_;
+		jumpSpeed_ -= 0.1f;
+		if (worldTransformBase_.translation_.y <= 0) {
+			worldTransformBase_.translation_.y = 0;
+			jumpFlag_ = false;
+		}
+	}
+
 	// 変換行列を更新
 	worldTransformBase_.matWorld_ = MakeAffineMatrix(
 	    worldTransformBase_.scale_, worldTransformBase_.rotation_,
@@ -50,4 +60,9 @@ void Enemy::Update() {
 void Enemy::Draw(const ViewProjection& viewProjection) {
 	// 3Dモデルを描画
 	modelBody_->Draw(worldTransformBody_, viewProjection);
+}
+
+void Enemy::Hit() {
+	jumpFlag_ = true;
+	jumpSpeed_ = 1.0f;
 }

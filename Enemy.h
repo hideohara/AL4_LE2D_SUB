@@ -17,7 +17,13 @@ public:
 	// 描画
 	void Draw(const ViewProjection& viewProjection);
 
-	const WorldTransform& GetWorldTransform() { return worldTransformBase_; }
+	// const WorldTransform& GetWorldTransform() { return worldTransformBase_; }
+
+	float GetX() { return worldTransformBase_.matWorld_.m[3][0]; }
+	float GetY() { return worldTransformBase_.matWorld_.m[3][1]; }
+	float GetZ() { return worldTransformBase_.matWorld_.m[3][2]; }
+
+	void Hit();
 
 private:
 	// ワールド変換データ
@@ -26,4 +32,8 @@ private:
 
 	// 3Dモデル
 	Model* modelBody_ = nullptr;
+
+	// ジャンプ
+	bool jumpFlag_ = false;
+	float jumpSpeed_ = 0;
 };
