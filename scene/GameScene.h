@@ -13,6 +13,8 @@
 #include "SafeDelete.h"
 #include "Skydome.h"
 #include "Sprite.h"
+#include "Title.h"
+#include "GameClear.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <memory>
@@ -73,6 +75,8 @@ private: // メンバ変数
 	std::unique_ptr<Ground> ground_;
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<Enemy> enemy_;
+	std::unique_ptr<Title> title_;
+	std::unique_ptr<GameClear> gameClear_;
 
 	// 3Dモデル
 	std::unique_ptr<Model> modelFighterBody_;
@@ -88,4 +92,9 @@ private: // メンバ変数
 
 	// 追従カメラ
 	std::unique_ptr<FollowCamera> followCamera_;
+
+	// ゲームシーン
+	uint32_t sceneMode_ = 1;
+
+	uint32_t hitCount_ = 0;
 };

@@ -32,7 +32,7 @@ void GameScene::Initialize() {
 	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
 	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
 	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
-
+	
 	modelEnemy_.reset(Model::CreateFromOBJ("needle_Body", true));
 
 	// 自機
@@ -68,51 +68,78 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 	// 軸方向表示の表示を有効にする
-	AxisIndicator::GetInstance()->SetVisible(true);
+	//AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する（アドレス渡し）
-	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+	//AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+
+	// シーン
+	title_ = std::make_unique<Title>();
+	title_->Initialize();
+	gameClear_ = std::make_unique<GameClear>();
+	gameClear_->Initialize();
 }
 
 // 更新
 void GameScene::Update() {
 
-	// デバッグカメラの更新
-	if (input_->TriggerKey(DIK_0)) {
-		// フラグをトグル
-		isDebugCameraActive_ = !isDebugCameraActive_;
-	}
-	if (isDebugCameraActive_ == true) {
-		debugCamera_->Update();
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-	} else {
-		followCamera_->Update();
-		viewProjection_.matView = followCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
-	}
-	// ビュープロジェクションの転送
-	viewProjection_.TransferMatrix();
-
-	player_->Update();
-	enemy_->Update();
-
-	// 衝突判定
-	if (enemy_->GetY() == 0) {
-
-		float dx = abs(player_->GetX() - enemy_->GetX());
-		float dz = abs(player_->GetZ() - enemy_->GetZ());
-		if (dx < 1 && dz < 1) {
-			// 衝突
-			// ImGui::Begin("Hit");
-			// ImGui::InputFloat("DX", &dx);
-			// ImGui::InputFloat("DZ", &dz);
-			// ImGui::End();
-
-			enemy_->Hit();
+	switch (sceneMode_) {
+	// ゲームプレイ
+	case 0:
+		// デバッグカメラの更新
+		if (input_->TriggerKey(DIK_0)) {
+			// フラグをトグル
+			isDebugCameraActive_ = !isDebugCameraActive_;
 		}
+		if (isDebugCameraActive_ == true) {
+			debugCamera_->Update();
+			viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+			viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		} else {
+			followCamera_->Update();
+			viewProjection_.matView = followCamera_->GetViewProjection().matView;
+			viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+		}
+		// ビュープロジェクションの転送
+		viewProjection_.TransferMatrix();
+
+		player_->Update();
+		enemy_->Update();
+
+		// 衝突判定
+		if (enemy_->GetY() == 0) {
+
+			float dx = abs(player_->GetX() - enemy_->GetX());
+			float dz = abs(player_->GetZ() - enemy_->GetZ());
+			if (dx < 1 && dz < 1) {
+				// 衝突
+				// ImGui::Begin("Hit");
+				// ImGui::InputFloat("DX", &dx);
+				// ImGui::InputFloat("DZ", &dz);
+				// ImGui::End();
+
+				enemy_->Hit();
+				hitCount_++;
+			}
+		}
+		if (hitCount_ >= 10) {
+			sceneMode_ = 2;
+		}
+		break;
+	// タイトル
+	case 1:
+		if (title_->Update() == true) {
+			sceneMode_ = 0;
+			hitCount_ = 0;
+		}
+		break;
+	// ゲームクリア
+	case 2:
+		if (gameClear_->Update() == true) {
+			sceneMode_ = 1;
+		}
+		break;
 	}
 }
-
 // 描画
 void GameScene::Draw() {
 
@@ -137,25 +164,30 @@ void GameScene::Draw() {
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
-	/// <summary>
-	/// ここに3Dオブジェクトの描画処理を追加できる
-	/// </summary>
+	switch (sceneMode_) {
+	case 0:
 
-	//   // クラスの描画
-	// if (isDebugCameraActive_ == true) {
-	//	player_->Draw(debugCamera_->GetViewProjection());
-	//	ground_->Draw(debugCamera_->GetViewProjection());
-	//	skydome_->Draw(debugCamera_->GetViewProjection());
-	//} else {
-	//	player_->Draw(viewProjection_);
-	//	ground_->Draw(viewProjection_);
-	//	skydome_->Draw(viewProjection_);
-	//}
+		/// <summary>
+		/// ここに3Dオブジェクトの描画処理を追加できる
+		/// </summary>
 
-	player_->Draw(viewProjection_);
-	enemy_->Draw(viewProjection_);
-	ground_->Draw(viewProjection_);
-	skydome_->Draw(viewProjection_);
+		//   // クラスの描画
+		// if (isDebugCameraActive_ == true) {
+		//	player_->Draw(debugCamera_->GetViewProjection());
+		//	ground_->Draw(debugCamera_->GetViewProjection());
+		//	skydome_->Draw(debugCamera_->GetViewProjection());
+		//} else {
+		//	player_->Draw(viewProjection_);
+		//	ground_->Draw(viewProjection_);
+		//	skydome_->Draw(viewProjection_);
+		//}
+
+		player_->Draw(viewProjection_);
+		enemy_->Draw(viewProjection_);
+		ground_->Draw(viewProjection_);
+		skydome_->Draw(viewProjection_);
+		break;
+	}
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -168,6 +200,15 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+
+	switch (sceneMode_) {
+	case 1:
+		title_->Draw();
+		break;
+	case 2:
+		gameClear_->Draw();
+		break;
+	}
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
