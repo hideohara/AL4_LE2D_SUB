@@ -1,15 +1,17 @@
 ﻿#include "Title.h"
 #include "TextureManager.h"
 
-void Title::Initialize() {
+void Title::Initialize(
+    Sprite* spriteTitle, Sprite* spriteKey, uint32_t textureHandleTitle,
+    uint32_t textureHandleKey) {
 
 	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("title.png");
-	textureHandleKey_ = TextureManager::Load("enter.png");
+	textureHandleTitle_ = textureHandleTitle;
+	textureHandleKey_ = textureHandleKey;
 
 	// スプライトの生成
-	sprite_.reset(Sprite::Create(textureHandle_, {0, 0}));
-	spriteKey_.reset(Sprite::Create(textureHandleKey_, {400, 500}));
+	spriteTitle_ = spriteTitle;
+	spriteKey_ = spriteKey;
 }
 
 
@@ -22,7 +24,7 @@ bool Title::Update() {
 }
 
 void Title::Draw() { 
-	sprite_->Draw(); 
+	spriteTitle_->Draw(); 
 	if (timer_ % 40 < 20) {
 		spriteKey_->Draw();
 	}

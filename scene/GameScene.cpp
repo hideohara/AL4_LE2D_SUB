@@ -72,11 +72,22 @@ void GameScene::Initialize() {
 	// 軸方向表示が参照するビュープロジェクションを指定する（アドレス渡し）
 	//AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 
+	// テクスチャ
+	textureHandleTitle_ = TextureManager::Load("title.png");
+	textureHandleGameClear_ = TextureManager::Load("gameclear.png");
+	textureHandleKey_ = TextureManager::Load("enter.png");
+	// スプライトの生成
+	spriteTitle_.reset(Sprite::Create(textureHandleTitle_, {0, 0}));
+	spriteGameClear_.reset(Sprite::Create(textureHandleGameClear_, {0, 0}));
+	spriteKey_.reset(Sprite::Create(textureHandleKey_, {400, 500}));
+	
 	// シーン
 	title_ = std::make_unique<Title>();
-	title_->Initialize();
+	title_->Initialize(
+	    spriteTitle_.get(), spriteKey_.get(), textureHandleTitle_, textureHandleKey_);
 	gameClear_ = std::make_unique<GameClear>();
-	gameClear_->Initialize();
+	gameClear_->Initialize(
+	    spriteGameClear_.get(), spriteKey_.get(), textureHandleTitle_, textureHandleKey_);
 }
 
 // 更新

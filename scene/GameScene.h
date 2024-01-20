@@ -85,6 +85,16 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelFighterR_arm_;
 	std::unique_ptr<Model> modelEnemy_;
 
+	// テクスチャハンドル
+	uint32_t textureHandleTitle_ = 0u;
+	uint32_t textureHandleGameClear_ = 0u;
+	uint32_t textureHandleKey_ = 0u;
+
+	// スプライト
+	std::unique_ptr<Sprite> spriteTitle_;
+	std::unique_ptr<Sprite> spriteGameClear_;
+	std::unique_ptr<Sprite> spriteKey_;
+
 	// デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_;
 	// デバッグカメラ有効

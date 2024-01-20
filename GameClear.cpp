@@ -3,15 +3,17 @@
 #include "Title.h"
 #include "TextureManager.h"
 
-void GameClear::Initialize() {
+void GameClear::Initialize(
+    Sprite* spriteGameClear, Sprite* spriteKey, 
+	uint32_t textureHandleGameClear, uint32_t textureHandleKey) {
 
 	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("gameclear.png");
-	textureHandleKey_ = TextureManager::Load("enter.png");
+	textureHandleGameClear_ = textureHandleGameClear;
+	textureHandleKey_ = textureHandleKey;
 
 	// スプライトの生成
-	sprite_.reset(Sprite::Create(textureHandle_, {0, 0}));
-	spriteKey_.reset(Sprite::Create(textureHandleKey_, {400, 500}));
+	spriteGameClear_ = spriteGameClear;
+	spriteKey_ = spriteKey;
 }
 
 bool GameClear::Update() {
@@ -23,7 +25,7 @@ bool GameClear::Update() {
 }
 
 void GameClear::Draw() {
-	sprite_->Draw();
+	spriteGameClear_->Draw();
 	if (timer_ % 40 < 20) {
 		spriteKey_->Draw();
 	}

@@ -6,8 +6,9 @@
 class GameClear {
 public:
 	// 初期化
-	void Initialize();
-
+	void Initialize(
+	    Sprite* spriteGameClear, Sprite* spriteKey, uint32_t textureHandleTitle,
+	    uint32_t textureHandleKey);
 	// 更新
 	bool Update();
 
@@ -18,12 +19,12 @@ private:
 	Input* input_ = nullptr;
 
 	// テクスチャハンドル
-	uint32_t textureHandle_ = 0;
+	uint32_t textureHandleGameClear_ = 0;
 	uint32_t textureHandleKey_ = 0;
 
 	// スプライト
-	std::unique_ptr<Sprite> sprite_;
-	std::unique_ptr<Sprite> spriteKey_;
+	Sprite* spriteGameClear_;
+	Sprite* spriteKey_;
 
 	// タイマー
 	int timer_ = 0;
