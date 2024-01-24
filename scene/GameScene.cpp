@@ -32,7 +32,7 @@ void GameScene::Initialize() {
 	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
 	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
 	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
-	
+
 	modelEnemy_.reset(Model::CreateFromOBJ("needle_Body", true));
 
 	// 自機
@@ -68,19 +68,21 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 	// 軸方向表示の表示を有効にする
-	//AxisIndicator::GetInstance()->SetVisible(true);
+	// AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する（アドレス渡し）
-	//AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+	// AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 
 	// テクスチャ
 	textureHandleTitle_ = TextureManager::Load("title.png");
 	textureHandleGameClear_ = TextureManager::Load("gameclear.png");
 	textureHandleKey_ = TextureManager::Load("enter.png");
+	textureHandleBlack_ = TextureManager::Load("black.png");
 	// スプライトの生成
 	spriteTitle_.reset(Sprite::Create(textureHandleTitle_, {0, 0}));
 	spriteGameClear_.reset(Sprite::Create(textureHandleGameClear_, {0, 0}));
 	spriteKey_.reset(Sprite::Create(textureHandleKey_, {400, 500}));
-	
+	spriteBlack_.reset(Sprite::Create(textureHandleBlack_, {0, 0}));
+
 	// シーン
 	title_ = std::make_unique<Title>();
 	title_->Initialize(
@@ -88,10 +90,17 @@ void GameScene::Initialize() {
 	gameClear_ = std::make_unique<GameClear>();
 	gameClear_->Initialize(
 	    spriteGameClear_.get(), spriteKey_.get(), textureHandleTitle_, textureHandleKey_);
+
+	// フェイド
+	fade_ = std::make_unique<Fade>();
+	fade_->Initialize(spriteBlack_.get(), textureHandleBlack_);
+	fade_->StartFadeIn();
 }
 
 // 更新
 void GameScene::Update() {
+
+	fade_->Update();
 
 	switch (sceneMode_) {
 	// ゲームプレイ
@@ -133,21 +142,36 @@ void GameScene::Update() {
 			}
 		}
 		if (hitCount_ >= 10) {
-			sceneMode_ = 2;
+			fade_->StartFadeOut();
 		}
+
+		if (fade_->IsEndFadeOut() == true) {
+			sceneMode_ = 2;
+			fade_->StartFadeIn();
+		}
+
 		break;
 	// タイトル
 	case 1:
 		if (title_->Update() == true) {
+			fade_->StartFadeOut();
+		}
+		if (fade_->IsEndFadeOut() == true) {
 			sceneMode_ = 0;
 			hitCount_ = 0;
+			fade_->StartFadeIn();
 		}
 		break;
 	// ゲームクリア
 	case 2:
 		if (gameClear_->Update() == true) {
-			sceneMode_ = 1;
+			fade_->StartFadeOut();
 		}
+		if (fade_->IsEndFadeOut() == true) {
+			sceneMode_ = 1;
+			fade_->StartFadeIn();
+		}
+
 		break;
 	}
 }
@@ -220,6 +244,14 @@ void GameScene::Draw() {
 		gameClear_->Draw();
 		break;
 	}
+
+	// spriteBlack_->SetColor({1, 1, 1, a});
+	// a -= 0.01f;
+	// if (a <= 0) {
+	//	a = 0;
+	// }
+
+	fade_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

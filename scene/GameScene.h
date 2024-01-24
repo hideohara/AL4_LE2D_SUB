@@ -5,7 +5,9 @@
 #include "DebugCamera.h"
 #include "DirectXCommon.h"
 #include "Enemy.h"
+#include "Fade.h"
 #include "FollowCamera.h"
+#include "GameClear.h"
 #include "Ground.h"
 #include "Input.h"
 #include "Model.h"
@@ -14,7 +16,6 @@
 #include "Skydome.h"
 #include "Sprite.h"
 #include "Title.h"
-#include "GameClear.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <memory>
@@ -77,6 +78,7 @@ private: // メンバ変数
 	std::unique_ptr<Enemy> enemy_;
 	std::unique_ptr<Title> title_;
 	std::unique_ptr<GameClear> gameClear_;
+	std::unique_ptr<Fade> fade_;
 
 	// 3Dモデル
 	std::unique_ptr<Model> modelFighterBody_;
@@ -89,11 +91,13 @@ private: // メンバ変数
 	uint32_t textureHandleTitle_ = 0u;
 	uint32_t textureHandleGameClear_ = 0u;
 	uint32_t textureHandleKey_ = 0u;
+	uint32_t textureHandleBlack_ = 0u;
 
 	// スプライト
 	std::unique_ptr<Sprite> spriteTitle_;
 	std::unique_ptr<Sprite> spriteGameClear_;
 	std::unique_ptr<Sprite> spriteKey_;
+	std::unique_ptr<Sprite> spriteBlack_;
 
 	// デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_;
@@ -107,4 +111,6 @@ private: // メンバ変数
 	uint32_t sceneMode_ = 1;
 
 	uint32_t hitCount_ = 0;
+
+	// bool endMode_ = false;
 };

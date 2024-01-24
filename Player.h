@@ -27,6 +27,7 @@ public:
 		viewProjection_ = viewProjection;
 	}
 
+	// 座標の獲得
 	float GetX() { return worldTransformBase_.matWorld_.m[3][0]; }
 	float GetY() { return worldTransformBase_.matWorld_.m[3][1]; }
 	float GetZ() { return worldTransformBase_.matWorld_.m[3][2]; }

@@ -14,8 +14,9 @@ void Title::Initialize(
 	spriteKey_ = spriteKey;
 }
 
-
 bool Title::Update() {
+
+	// spriteKey_->SetColor({1, 1, 1, 0.2f});
 	timer_++;
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 		return true;
@@ -23,8 +24,8 @@ bool Title::Update() {
 	return false;
 }
 
-void Title::Draw() { 
-	spriteTitle_->Draw(); 
+void Title::Draw() {
+	spriteTitle_->Draw();
 	if (timer_ % 40 < 20) {
 		spriteKey_->Draw();
 	}
